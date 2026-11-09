@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jackis kleines Kochbuch</title>
+<style>
+:root {
+  --beige:#b7a58b;
+  --beige-dark:#81705a;
+  --sand:#eee6da;
+  --cream:#f8f5ef;
+  --paper:#fffdf9;
+  --ink:#40392f;
+  --muted:#8a8073;
+  --line:#e6ddd0;
+  --rose:#b86f63;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:"Segoe UI",Arial,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:0;border-radius:9px;padding:11px 15px;background:var(--beige-dark);color:white}
+button:hover{opacity:.86}
+button.secondary{background:var(--sand);color:var(--ink)}
+button.danger{background:#a75e52;color:white}
+button.small{padding:7px 10px;font-size:13px}
+button:disabled{opacity:.45;cursor:not-allowed}
+header{background:#e7ddce;padding:25px 20px;border-bottom:1px solid var(--line)}
+.header-inner{max-width:1150px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+h1{margin:0;font-family:Georgia,serif;font-weight:normal;font-size:clamp(27px,4vw,38px)}
+.subtitle{color:var(--muted);margin:7px 0 0;font-size:14px;line-height:1.5}
+.header-actions{display:flex;flex-wrap:wrap;gap:8px}
+main{max-width:1150px;margin:25px auto;padding:0 18px 50px}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:17px}
+.toolbar input,.toolbar select{flex:1;min-width:170px}
+input,select,textarea{width:100%;border:1px solid var(--line);background:white;color:var(--ink);padding:11px 12px;border-radius:8px}
+textarea{min-height:110px;resize:vertical}
+label{display:block;margin-bottom:6px;font-size:14px;font-weight:600}
+.field{margin-bottom:16px}
+.view-title{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:17px}
+.view-title h2,.panel h2{font-family:Georgia,serif;font-weight:normal;font-size:29px;margin:0}
+.recipe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:17px}
+.recipe-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 3px 12px #65543b0a}
+.recipe-photo{width:100%;height:190px;object-fit:cover;display:block;background:var(--sand)}
+.photo-placeholder{height:150px;background:linear-gradient(135deg,#eee6da,#e1d2be);display:flex;align-items:center;justify-content:center;font-size:44px;color:var(--beige-dark)}
+.recipe-card-top{padding:17px 17px 10px}
+.recipe-card h3{font-family:Georgia,serif;font-size:22px;font-weight:normal;margin:10px 0;overflow-wrap:anywhere}
+.recipe-card p{color:var(--muted);font-size:14px;line-height:1.5}
+.recipe-card-bottom{border-top:1px solid var(--line);padding:12px 15px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.category-tag{display:inline-block;background:var(--sand);border-radius:20px;padding:5px 9px;font-size:12px;color:var(--beige-dark)}
+.recipe-select{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:normal;cursor:pointer}
+.recipe-select input,.ingredient-check input{width:17px;height:17px;accent-color:var(--beige-dark)}
+.recipe-actions{display:flex;gap:6px;flex-wrap:wrap}
+.empty{text-align:center;padding:45px 20px;color:var(--muted);background:var(--paper);border:1px dashed var(--line);border-radius:14px}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:23px;margin-bottom:20px}
+.panel h3{font-family:Georgia,serif;font-weight:normal;font-size:21px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
+.form-grid .full{grid-column:1/-1}
+.ingredient-row{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:8px;margin-bottom:8px;align-items:center}
+.ingredient-row input{min-width:0}
+.detail-meta{color:var(--muted);margin:10px 0 20px;font-size:14px}
+.detail-photo{width:100%;max-height:430px;object-fit:cover;border-radius:12px;margin:15px 0 20px}
+.detail-columns{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.4fr);gap:30px}
+.ingredient-check{display:flex;gap:9px;align-items:flex-start;margin:12px 0;font-weight:normal;line-height:1.45}
+.ingredient-check input{margin-top:2px;flex-shrink:0}
+.steps{white-space:pre-wrap;line-height:1.8;overflow-wrap:anywhere}
+.shopping-row{display:grid;grid-template-columns:auto minmax(120px,2fr) minmax(65px,.7fr) minmax(75px,.8fr) minmax(110px,1fr) auto;gap:9px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.shopping-row:last-child{border-bottom:none}
+.shopping-row input[type="checkbox"]{width:18px;height:18px;accent-color:var(--beige-dark)}
+.shopping-row.checked .item-name{text-decoration:line-through;opacity:.5}
+.shopping-row .source{font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+.shopping-row input{min-width:0;padding:8px}
+.shopping-add{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:8px;margin:15px 0}
+.shopping-summary{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:14px;margin:12px 0}
+.photo-preview{display:flex;align-items:flex-start;gap:15px;flex-wrap:wrap;margin:10px 0}
+.photo-preview img{width:min(260px,100%);max-height:220px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
+footer{text-align:center;padding:20px;font-size:12px;color:var(--muted)}
+.hidden{display:none!important}
+@media(max-width:700px){
+ .detail-columns{grid-template-columns:1fr;gap:15px}
+ .form-grid{grid-template-columns:1fr}
+ .form-grid .full{grid-column:auto}
+ .ingredient-row{grid-template-columns:1fr 1fr}
+ .ingredient-row input:first-child{grid-column:1/-1}
+ .shopping-row{grid-template-columns:auto 1fr 1fr;gap:7px}
+ .shopping-row .item-name{grid-column:span 2}
+ .shopping-row .source{grid-column:2/-1}
+ .shopping-add{grid-template-columns:1fr 1fr}
+ .shopping-add input:first-child{grid-column:1/-1}
+ .header-actions{width:100%}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <div>
+      <h1>Mein kleines Kochbuch</h1>
+      <p class="subtitle">Lieblingsrezepte sammeln und genießen</p>
+    </div>
+    <div class="header-actions">
+<button class="secondary" onclick="window.location.href='index.html'">
+  ← Home
+</button>
+      <button id="shoppingNav" onclick="showShopping()">🛒 Einkaufsliste (0)</button>
+      <button class="secondary" onclick="exportData()">Export</button>
+      <button class="secondary" onclick="document.getElementById('importFile').click()">Import</button>
+      <input type="file" id="importFile" accept=".json,application/json" hidden onchange="importData(event)">
+    </div>
+  </div>
+</header>
+
+<main>
+<section id="homeView">
+  <div class="view-title"><h2>Meine Rezepte</h2><button onclick="openNewRecipe()">＋ Neues Rezept</button></div>
+
+  <div class="toolbar">
+    <input id="searchInput" placeholder="🔍 Rezept suchen ..." oninput="renderRecipes()">
+    <select id="categoryFilter" onchange="renderRecipes()">
+      <option value="">Alle Kategorien</option>
+      <optgroup label="Hauptgericht">
+        <option value="Faschiertes">Faschiertes</option>
+        <option value="Fleisch">Fleisch</option>
+        <option value="Huhn">Huhn</option>
+        <option value="Vegetarisch">Vegetarisch</option>
+      </optgroup>
+      <option value="Vorspeise">Vorspeise</option>
+      <option value="Dessert">Dessert</option>
+      <option value="Beilage">Beilage</option>
+      <option value="Backen">Backen</option>
+      <option value="Frühstück">Frühstück</option>
+      <option value="Finger Food / Snacks">Finger Food / Snacks</option>
+      <option value="Sonstiges">Sonstiges</option>
+    </select>
+    <select id="sortFilter" onchange="renderRecipes()">
+      <option value="name">Alphabetisch sortieren</option>
+      <option value="newest">Neueste zuerst</option>
+      <option value="favorites">Favoriten zuerst</option>
+    </select>
+  </div>
+
+  <div class="panel">
+    <strong>Gemeinsame Einkaufsliste</strong>
+    <p class="subtitle">Wähle mehrere Rezepte aus. Die Zutaten werden gemeinsam in deine Einkaufsliste übernommen.</p>
+    <div class="header-actions" style="margin-top:12px">
+      <button id="addSelectedButton" onclick="addSelectedToShoppingList()" disabled>＋ Ausgewählte Rezepte hinzufügen</button>
+      <button class="secondary" onclick="showShopping()">Einkaufsliste öffnen</button>
+    </div>
+    <p id="selectedCount" class="subtitle">0 Rezepte ausgewählt</p>
+  </div>
+
+  <div id="recipeGrid" class="recipe-grid"></div>
+</section>
+
+<section id="detailView" class="hidden">
+  <div class="view-title">
+    <button class="secondary" onclick="showHome()">← Zurück zu den Rezepten</button>
+    <div class="header-actions">
+      <button class="secondary" onclick="editCurrentRecipe()">Bearbeiten</button>
+      <button onclick="addCurrentRecipeToShoppingList()">🛒 Zutaten hinzufügen</button>
+    </div>
+  </div>
+  <div id="recipeDetail" class="panel"></div>
+</section>
+
+<section id="formView" class="hidden">
+  <div class="view-title"><h2 id="formTitle">Neues Rezept</h2><button class="secondary" onclick="showHome()">Abbrechen</button></div>
+
+  <form id="recipeForm" class="panel" onsubmit="saveRecipe(event)">
+    <input type="hidden" id="recipeId">
+    <div class="form-grid">
+      <div class="field full">
+        <label for="recipeName">Name des Rezepts *</label>
+        <input id="recipeName" required placeholder="z. B. Lasagne">
+      </div>
+      <div class="field">
+        <label for="category">Kategorie *</label>
+        <select id="category" required>
+          <optgroup label="Hauptgericht">
+            <option value="Faschiertes">Faschiertes</option>
+            <option value="Fleisch">Fleisch</option>
+            <option value="Huhn">Huhn</option>
+            <option value="Vegetarisch">Vegetarisch</option>
+          </optgroup>
+          <option value="Vorspeise">Vorspeise</option>
+          <option value="Dessert">Dessert</option>
+          <option value="Beilage">Beilage</option>
+          <option value="Backen">Backen</option>
+          <option value="Frühstück">Frühstück</option>
+          <option value="Finger Food / Snacks">Finger Food / Snacks</option>
+          <option value="Sonstiges">Sonstiges</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="recipeTime">Zubereitungszeit (Minuten)</label>
+        <input id="recipeTime" type="number" min="0" placeholder="z. B. 45">
+      </div>
+      <div class="field">
+        <label for="recipeServings">Portionen</label>
+        <input id="recipeServings" type="number" min="1" value="4">
+      </div>
+      <div class="field full">
+        <label for="recipeDescription">Kurze Beschreibung</label>
+        <textarea id="recipeDescription" rows="2" placeholder="Was macht das Rezept besonders?"></textarea>
+      </div>
+    </div>
+
+    <h3>Rezeptfoto</h3>
+    <div class="field">
+      <label for="recipePhoto">Foto vom Gerät auswählen</label>
+      <input id="recipePhoto" type="file" accept="image/*" onchange="previewPhoto(event)">
+      <p class="subtitle">Das Foto wird verkleinert und zusammen mit dem Rezept in deinem Browser gespeichert.</p>
+      <div id="photoPreview" class="photo-preview"></div>
+      <button type="button" id="removePhotoButton" class="secondary small hidden" onclick="removeRecipePhoto()">Foto entfernen</button>
+    </div>
+
+    <h3>Zutaten</h3>
+    <div id="ingredientFields"></div>
+    <button type="button" class="secondary" onclick="addIngredientField()">＋ Zutat hinzufügen</button>
+
+    <div class="field" style="margin-top:22px">
+      <label for="recipeSteps">Zubereitung</label>
+      <textarea id="recipeSteps" placeholder="1. Zwiebel schneiden ..."></textarea>
+    </div>
+    <div class="field">
+      <label for="recipeNotes">Notizen</label>
+      <textarea id="recipeNotes" rows="3" placeholder="Tipps, Varianten oder persönliche Notizen"></textarea>
+    </div>
+    <button type="submit">Rezept speichern</button>
+  </form>
+</section>
+
+<section id="shoppingView" class="hidden">
+  <div class="view-title"><h2>Meine Einkaufsliste</h2><button class="secondary" onclick="showHome()">← Zurück zu den Rezepten</button></div>
+  <div class="panel">
+    <p class="subtitle">Hier stehen die Zutaten aller hinzugefügten Rezepte. Du kannst Mengen und Zutaten bearbeiten und erledigte Einkäufe abhaken.</p>
+    <div class="shopping-add">
+      <input id="newItemName" placeholder="Neue Zutat, z. B. Milch">
+      <input id="newItemAmount" placeholder="Menge">
+      <input id="newItemUnit" placeholder="Einheit">
+      <button onclick="addCustomShoppingItem()">＋ Hinzufügen</button>
+    </div>
+    <div class="shopping-summary"><span id="shoppingProgress">0 von 0 erledigt</span><span id="shoppingSources"></span></div>
+    <div class="header-actions" style="margin:14px 0">
+      <button class="secondary small" onclick="removeCheckedItems()">Erledigte entfernen</button>
+      <button class="secondary small" onclick="uncheckAllItems()">Alle Häkchen entfernen</button>
+      <button class="danger small" onclick="clearShoppingList()">Liste leeren</button>
+    </div>
+    <div id="shoppingItems"></div>
+    <div id="shoppingEmpty" class="empty hidden">
+      <p>Deine Einkaufsliste ist noch leer.</p>
+      <p>Wähle Rezepte aus oder füge Zutaten manuell hinzu.</p>
+      <button onclick="showHome()">Rezepte auswählen</button>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>Mein kleines Kochbuch · Deine Daten werden lokal in diesem Browser gespeichert.</footer>
+
+<script>
+const RECIPE_KEY = "mein-kleines-kochbuch-v1";
+const SHOPPING_KEY = "mein-kochbuch-einkaufsliste-v1";
+let recipes = loadRecipes();
+let shoppingList = loadShoppingList();
+let selectedRecipeIds = new Set();
+let currentRecipeId = null;
+let pendingPhotoData = "";
+
+function loadRecipes() {
+  try {
+    const data = JSON.parse(localStorage.getItem(RECIPE_KEY) || "[]");
+    return Array.isArray(data) ? data : [];
+  } catch { return []; }
+}
+function loadShoppingList() {
+  try {
+    const data = JSON.parse(localStorage.getItem(SHOPPING_KEY) || "[]");
+    return Array.isArray(data) ? data : [];
+  } catch { return []; }
+}
+function saveRecipes() {
+  try {
+    localStorage.setItem(RECIPE_KEY, JSON.stringify(recipes));
+  } catch {
+    alert("Speichern nicht möglich. Der Browser-Speicher ist möglicherweise voll. Bitte verwende kleinere Fotos oder exportiere deine Daten.");
+  }
+}
+function saveShoppingList() {
+  try { localStorage.setItem(SHOPPING_KEY, JSON.stringify(shoppingList)); }
+  catch { alert("Die Einkaufsliste konnte nicht gespeichert werden. Der Browser-Speicher ist möglicherweise voll."); }
+  updateShoppingNavigation();
+}
+function makeId() { return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+function showView(viewId) {
+  ["homeView","detailView","formView","shoppingView"].forEach(id =>
+    document.getElementById(id).classList.toggle("hidden", id !== viewId)
+  );
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function showHome() { showView("homeView"); renderRecipes(); }
+function showShopping() { renderShoppingList(); showView("shoppingView"); }
+function updateShoppingNavigation() {
+  const n = shoppingList.filter(i => !i.checked).length;
+  document.getElementById("shoppingNav").textContent = `🛒 Einkaufsliste (${n})`;
+}
+
+function renderRecipes() {
+  const grid = document.getElementById("recipeGrid");
+  const search = document.getElementById("searchInput").value.trim().toLowerCase();
+  const category = document.getElementById("categoryFilter").value;
+  const sort = document.getElementById("sortFilter").value;
+
+  let filtered = recipes.filter(r => {
+    const match = (r.name||"").toLowerCase().includes(search) ||
+      (r.description||"").toLowerCase().includes(search) ||
+      (r.ingredients||[]).some(i => (i.name||"").toLowerCase().includes(search));
+    return match && (!category || r.category === category);
+  });
+
+  if (sort === "name") filtered.sort((a,b)=>(a.name||"").localeCompare(b.name||"","de"));
+  if (sort === "newest") filtered.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+  if (sort === "favorites") filtered.sort((a,b)=>Number(b.favorite)-Number(a.favorite));
+
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1">
+      <p>${recipes.length ? "Keine passenden Rezepte gefunden." : "Du hast noch keine Rezepte gespeichert."}</p>
+      <button onclick="openNewRecipe()">＋ Rezept erstellen</button>
+    </div>`;
+  } else {
+    grid.innerHTML = filtered.map(r => `
+      <article class="recipe-card">
+        ${r.photo
+          ? `<img class="recipe-photo" src="${r.photo}" alt="Foto von ${escapeHTML(r.name)}">`
+          : `<div class="photo-placeholder">🍽️</div>`}
+        <div class="recipe-card-top">
+          <label class="recipe-select">
+            <input type="checkbox" ${selectedRecipeIds.has(r.id)?"checked":""}
+              onchange="toggleRecipeSelection('${r.id}',this.checked)">
+            Für Einkaufsliste auswählen
+          </label>
+          <h3>${escapeHTML(r.name)}</h3>
+          <span class="category-tag">${escapeHTML(r.category||"Sonstiges")}</span>
+          <p>${escapeHTML(r.description||"Ein leckeres Rezept für deine Sammlung.")}</p>
+          <p>⏱ ${r.time ? escapeHTML(r.time)+" Minuten" : "Keine Zeitangabe"} · 🍽 ${escapeHTML(r.servings||4)} Portionen</p>
+          <p>${(r.ingredients||[]).length} Zutaten</p>
+        </div>
+        <div class="recipe-card-bottom">
+          <button class="secondary small" onclick="showRecipe('${r.id}')">Rezept ansehen</button>
+          <div class="recipe-actions">
+            <button class="secondary small" title="Favorit" onclick="toggleFavorite('${r.id}')">${r.favorite?"♥":"♡"}</button>
+            <button class="secondary small" title="Bearbeiten" onclick="editRecipe('${r.id}')">✎</button>
+            <button class="danger small" title="Löschen" onclick="deleteRecipe('${r.id}')">×</button>
+          </div>
+        </div>
+      </article>`).join("");
+  }
+  updateSelectedCount();
+}
+function toggleRecipeSelection(id,checked) {
+  if (checked) selectedRecipeIds.add(id);
+  else selectedRecipeIds.delete(id);
+  updateSelectedCount();
+}
+function updateSelectedCount() {
+  const n=selectedRecipeIds.size;
+  document.getElementById("selectedCount").textContent=`${n} ${n===1?"Rezept":"Rezepte"} ausgewählt`;
+  document.getElementById("addSelectedButton").disabled=n===0;
+}
+function toggleFavorite(id) {
+  const r=recipes.find(x=>x.id===id);
+  if (!r) return;
+  r.favorite=!r.favorite;
+  saveRecipes();renderRecipes();
+}
+
+function resetPhotoEditor(photo="") {
+  pendingPhotoData=photo||"";
+  document.getElementById("recipePhoto").value="";
+  renderPhotoPreview();
+}
+function renderPhotoPreview() {
+  const box=document.getElementById("photoPreview");
+  const remove=document.getElementById("removePhotoButton");
+  box.innerHTML=pendingPhotoData
+    ? `<img src="${pendingPhotoData}" alt="Vorschau des Rezeptfotos">`
+    : `<p class="subtitle">Noch kein Foto ausgewählt.</p>`;
+  remove.classList.toggle("hidden",!pendingPhotoData);
+}
+function previewPhoto(event) {
+  const file=event.target.files && event.target.files[0];
+  if (!file) return;
+  if (!file.type.startsWith("image/")) {
+    alert("Bitte wähle eine Bilddatei aus.");
+    event.target.value="";
+    return;
+  }
+  const reader=new FileReader();
+  reader.onload=()=>{
+    const img=new Image();
+    img.onload=()=>{
+      const maxSide=1200;
+      const scale=Math.min(1,maxSide/Math.max(img.width,img.height));
+      const canvas=document.createElement("canvas");
+      canvas.width=Math.max(1,Math.round(img.width*scale));
+      canvas.height=Math.max(1,Math.round(img.height*scale));
+      canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);
+      pendingPhotoData=canvas.toDataURL("image/jpeg",0.82);
+      renderPhotoPreview();
+    };
+    img.onerror=()=>alert("Das Bild konnte nicht gelesen werden.");
+    img.src=reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+function removeRecipePhoto() {
+  pendingPhotoData="";
+  document.getElementById("recipePhoto").value="";
+  renderPhotoPreview();
+}
+
+function openNewRecipe() {
+  currentRecipeId=null;
+  document.getElementById("recipeForm").reset();
+  document.getElementById("recipeId").value="";
+  document.getElementById("recipeServings").value=4;
+  document.getElementById("formTitle").textContent="Neues Rezept";
+  document.getElementById("ingredientFields").innerHTML="";
+  addIngredientField();addIngredientField();
+  resetPhotoEditor("");
+  showView("formView");
+}
+function addIngredientField(ingredient={}) {
+  const row=document.createElement("div");
+  row.className="ingredient-row";
+  row.innerHTML=`
+    <input class="ingredient-name" placeholder="Zutat" aria-label="Zutat" value="${escapeHTML(ingredient.name||"")}">
+    <input class="ingredient-amount" placeholder="Menge" aria-label="Menge" value="${escapeHTML(ingredient.amount||"")}">
+    <input class="ingredient-unit" placeholder="Einheit" aria-label="Einheit" value="${escapeHTML(ingredient.unit||"")}">
+    <button type="button" class="danger small" aria-label="Zutat entfernen">×</button>`;
+  row.querySelector("button").addEventListener("click",()=>row.remove());
+  document.getElementById("ingredientFields").appendChild(row);
+}
+function readIngredientFields() {
+  return [...document.querySelectorAll("#ingredientFields .ingredient-row")]
+    .map(row=>({
+      name:row.querySelector(".ingredient-name").value.trim(),
+      amount:row.querySelector(".ingredient-amount").value.trim(),
+      unit:row.querySelector(".ingredient-unit").value.trim()
+    }))
+    .filter(i=>i.name);
+}
+function saveRecipe(event) {
+  event.preventDefault();
+  const id=document.getElementById("recipeId").value||makeId();
+  const old=recipes.find(r=>r.id===id);
+  const recipe={
+    id,
+    name:document.getElementById("recipeName").value.trim(),
+    category:document.getElementById("category").value,
+    time:document.getElementById("recipeTime").value,
+    servings:Math.max(1,Number(document.getElementById("recipeServings").value)||4),
+    description:document.getElementById("recipeDescription").value.trim(),
+    ingredients:readIngredientFields(),
+    steps:document.getElementById("recipeSteps").value.trim(),
+    notes:document.getElementById("recipeNotes").value.trim(),
+    favorite:old?old.favorite:false,
+    createdAt:old?old.createdAt:Date.now(),
+    photo:pendingPhotoData||""
+  };
+  if (old) recipes=recipes.map(r=>r.id===id?recipe:r);
+  else recipes.push(recipe);
+  saveRecipes();
+  showHome();
+}
+function editRecipe(id) {
+  const r=recipes.find(x=>x.id===id);
+  if (!r) return;
+  currentRecipeId=id;
+  document.getElementById("recipeId").value=id;
+  document.getElementById("recipeName").value=r.name||"";
+  document.getElementById("category").value=r.category||"Sonstiges";
+  if (!document.getElementById("category").value) document.getElementById("category").value="Sonstiges";
+  document.getElementById("recipeTime").value=r.time||"";
+  document.getElementById("recipeServings").value=r.servings||4;
+  document.getElementById("recipeDescription").value=r.description||"";
+  document.getElementById("recipeSteps").value=r.steps||"";
+  document.getElementById("recipeNotes").value=r.notes||"";
+  document.getElementById("formTitle").textContent="Rezept bearbeiten";
+  document.getElementById("ingredientFields").innerHTML="";
+  (r.ingredients||[]).forEach(addIngredientField);
+  if (!(r.ingredients||[]).length) addIngredientField();
+  resetPhotoEditor(r.photo||"");
+  showView("formView");
+}
+function editCurrentRecipe() { if (currentRecipeId) editRecipe(currentRecipeId); }
+function deleteRecipe(id) {
+  const r=recipes.find(x=>x.id===id);
+  if (!r) return;
+  if (!confirm(`Möchtest du „${r.name}“ wirklich löschen?`)) return;
+  recipes=recipes.filter(x=>x.id!==id);
+  selectedRecipeIds.delete(id);
+  saveRecipes();renderRecipes();
+}
+function showRecipe(id) {
+  const r=recipes.find(x=>x.id===id);
+  if (!r) return;
+  currentRecipeId=id;
+  document.getElementById("recipeDetail").innerHTML=`
+    <h2>${escapeHTML(r.name)}</h2>
+    <span class="category-tag">${escapeHTML(r.category||"Sonstiges")}</span>
+    ${r.photo?`<img class="detail-photo" src="${r.photo}" alt="Foto von ${escapeHTML(r.name)}">`:""}
+    <div class="detail-meta">⏱ ${r.time?escapeHTML(r.time)+" Minuten":"Keine Zeitangabe"} · 🍽 ${escapeHTML(r.servings||4)} Portionen</div>
+    ${r.description?`<p>${escapeHTML(r.description)}</p>`:""}
+    <div class="detail-columns">
+      <div><h3>Zutaten</h3>
+        <p class="subtitle">Hake Zutaten ab oder füge sie der Einkaufsliste hinzu.</p>
+        ${(r.ingredients||[]).map(i=>`
+          <label class="ingredient-check"><input type="checkbox">
+            <span>${escapeHTML([i.amount,i.unit,i.name].filter(Boolean).join(" "))}</span>
+          </label>`).join("")||"<p>Noch keine Zutaten eingetragen.</p>"}
+        <button onclick="addCurrentRecipeToShoppingList()">🛒 Zutaten zur Einkaufsliste</button>
+      </div>
+      <div><h3>Zubereitung</h3><div class="steps">${escapeHTML(r.steps||"Noch keine Zubereitung eingetragen.")}</div>
+        ${r.notes?`<h3>Notizen</h3><div class="steps">${escapeHTML(r.notes)}</div>`:""}
+      </div>
+    </div>`;
+  showView("detailView");
+}
+
+function addSelectedToShoppingList() {
+  const selected=recipes.filter(r=>selectedRecipeIds.has(r.id));
+  if (!selected.length) return;
+  let added=0;
+  selected.forEach(r=>(r.ingredients||[]).forEach(i=>{
+    if (!i.name||!i.name.trim()) return;
+    shoppingList.push({
+      id:makeId(),name:i.name,amount:i.amount||"",unit:i.unit||"",
+      source:r.name,checked:false
+    });
+    added++;
+  }));
+  if (!added) { alert("Die ausgewählten Rezepte enthalten noch keine Zutaten.");return; }
+  saveShoppingList();
+  selectedRecipeIds.clear();
+  renderRecipes();
+  showShopping();
+}
+function addCurrentRecipeToShoppingList() {
+  if (!currentRecipeId) return;
+  selectedRecipeIds=new Set([currentRecipeId]);
+  addSelectedToShoppingList();
+}
+function renderShoppingList() {
+  const container=document.getElementById("shoppingItems");
+  const empty=document.getElementById("shoppingEmpty");
+  if (!shoppingList.length) {
+    container.innerHTML="";
+    empty.classList.remove("hidden");
+  } else {
+    empty.classList.add("hidden");
+    container.innerHTML=shoppingList.map(i=>`
+      <div class="shopping-row ${i.checked?"checked":""}" data-id="${escapeHTML(i.id)}">
+        <input type="checkbox" aria-label="Als erledigt markieren" ${i.checked?"checked":""}
+          onchange="toggleShoppingItem('${i.id}',this.checked)">
+        <input class="item-name" aria-label="Zutat" value="${escapeHTML(i.name)}"
+          onchange="updateShoppingItem('${i.id}','name',this.value)">
+        <input aria-label="Menge" placeholder="Menge" value="${escapeHTML(i.amount||"")}"
+          onchange="updateShoppingItem('${i.id}','amount',this.value)">
+        <input aria-label="Einheit" placeholder="Einheit" value="${escapeHTML(i.unit||"")}"
+          onchange="updateShoppingItem('${i.id}','unit',this.value)">
+        <span class="source">${escapeHTML(i.source||"Eigener Eintrag")}</span>
+        <button class="danger small" aria-label="Zutat löschen" onclick="deleteShoppingItem('${i.id}')">×</button>
+      </div>`).join("");
+  }
+  const checked=shoppingList.filter(i=>i.checked).length;
+  document.getElementById("shoppingProgress").textContent=`${checked} von ${shoppingList.length} erledigt`;
+  const sources=[...new Set(shoppingList.map(i=>i.source).filter(Boolean))];
+  document.getElementById("shoppingSources").textContent=sources.length?`Rezepte: ${sources.join(", ")}`:"Manuell erstellte Liste";
+  updateShoppingNavigation();
+}
+function toggleShoppingItem(id,checked) {
+  const i=shoppingList.find(x=>x.id===id);
+  if (!i) return;
+  i.checked=checked;saveShoppingList();renderShoppingList();
+}
+function updateShoppingItem(id,field,value) {
+  const i=shoppingList.find(x=>x.id===id);
+  if (!i) return;
+  i[field]=value;saveShoppingList();
+}
+function deleteShoppingItem(id) {
+  shoppingList=shoppingList.filter(i=>i.id!==id);
+  saveShoppingList();renderShoppingList();
+}
+function addCustomShoppingItem() {
+  const name=document.getElementById("newItemName");
+  const amount=document.getElementById("newItemAmount");
+  const unit=document.getElementById("newItemUnit");
+  if (!name.value.trim()) { alert("Bitte gib eine Zutat ein.");name.focus();return; }
+  shoppingList.push({
+    id:makeId(),name:name.value.trim(),amount:amount.value.trim(),
+    unit:unit.value.trim(),source:"",checked:false
+  });
+  name.value="";amount.value="";unit.value="";
+  saveShoppingList();renderShoppingList();name.focus();
+}
+function removeCheckedItems() {
+  shoppingList=shoppingList.filter(i=>!i.checked);
+  saveShoppingList();renderShoppingList();
+}
+function uncheckAllItems() {
+  shoppingList.forEach(i=>i.checked=false);
+  saveShoppingList();renderShoppingList();
+}
+function clearShoppingList() {
+  if (!shoppingList.length) return;
+  if (!confirm("Möchtest du die gesamte Einkaufsliste löschen?")) return;
+  shoppingList=[];saveShoppingList();renderShoppingList();
+}
+
+function exportData() {
+  const data={version:3,exportedAt:new Date().toISOString(),recipes,shoppingList};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download="mein-kochbuch-backup.json";a.click();
+  URL.revokeObjectURL(url);
+}
+function importData(event) {
+  const file=event.target.files[0];
+  if (!file) return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try {
+      const data=JSON.parse(reader.result);
+      const incomingRecipes=Array.isArray(data)?data:data.recipes;
+      const incomingShopping=Array.isArray(data)?null:data.shoppingList;
+      if (!Array.isArray(incomingRecipes)) throw new Error("Ungültiges Format");
+      if (!confirm("Importieren? Die vorhandenen Rezepte werden ersetzt.")) {
+        event.target.value="";return;
+      }
+      recipes=incomingRecipes.map(r=>({
+        ...r,id:r.id||makeId(),
+        ingredients:Array.isArray(r.ingredients)?r.ingredients:[],
+        servings:r.servings||4,photo:r.photo||""
+      }));
+      if (Array.isArray(incomingShopping)) {
+        shoppingList=incomingShopping.map(i=>({...i,id:i.id||makeId(),checked:Boolean(i.checked)}));
+      }
+      saveRecipes();saveShoppingList();selectedRecipeIds.clear();
+      showHome();alert("Import erfolgreich!");
+    } catch {
+      alert("Die Datei konnte nicht importiert werden. Bitte überprüfe die JSON-Datei.");
+    }
+    event.target.value="";
+  };
+  reader.readAsText(file);
+}
+
+updateShoppingNavigation();
+renderRecipes();
+</script>
+</body>
+</html>

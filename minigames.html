@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080d19">
+<meta name="description" content="DUP7O Minigames – neun kostenlose Browsergames.">
+<title>DUP7O — Minigames</title>
+
+<style>
+
+/* ==================================================
+   01 – FARBEN UND DESIGN-VARIABLEN
+   Hier kannst du später die Grundfarben ändern.
+================================================== */
+
+:root {
+  --bg:#080d19;
+  --panel:#101a2c;
+  --blue:#4169ff;
+  --blue2:#7095ff;
+  --text:#f4f7ff;
+  --muted:#a6b6d1;
+  --line:rgba(145,170,220,.16);
+  --gold:#facc15;
+  --green:#4ade80;
+  --red:#fb7185;
+  --max:1160px;
+}
+
+
+/* ==================================================
+   02 – GRUNDDESIGN UND SEITENLAYOUT
+================================================== */
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+  line-height:1.6
+}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit}
+
+.wrap{width:min(var(--max),calc(100% - 44px));margin:auto}
+
+
+/* ==================================================
+   03 – BUTTON-DESIGN
+   Normale Buttons, Hover-Effekte und Farbvarianten.
+================================================== */
+
+button{
+  cursor:pointer;border:1px solid transparent;border-radius:10px;
+  padding:0px 18px;color:#fff;font-weight:800;
+  background:linear-gradient(135deg,#4169ff,#2850e8);
+  box-shadow:0 8px 28px #4169ff20;
+  transition:transform .2s,filter .2s
+}
+button:hover{filter:brightness(1.12);transform:translateY(-2px)}
+button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+button.secondary{background:#17243b;border:1px solid #344766;box-shadow:none}
+button.green{background:linear-gradient(135deg,#059669,#22c55e)}
+button.red{background:linear-gradient(135deg,#be123c,#f43f5e)}
+
+
+/* ==================================================
+   04 – INPUT-FELDER
+   Eingabefelder und Zahlenfelder.
+================================================== */
+
+input{
+  width:100%;padding:13px 15px;border-radius:10px;
+  background:#080f1d;color:white;border:1px solid #344766;outline:none
+}
+input:focus{border-color:var(--blue2);box-shadow:0 0 0 3px #7095ff20}
+input[type=number]{appearance:textfield;-moz-appearance:textfield}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none}
+
+
+/* ==================================================
+   05 – OBERE NAVIGATION
+   Logo, Navigationslinks und Discord-Button.
+================================================== */
+
+header{
+  position:sticky;top:0;z-index:30;background:#080d19ef;
+  backdrop-filter:blur(16px);border-bottom:1px solid var(--line)
+}
+.nav{height:78px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.logo,.small-logo{font-weight:950;letter-spacing:-.075em}
+.logo{font-size:30px;line-height:1}
+.logo span,.small-logo span{color:var(--blue2)}
+.navlinks{
+  display:flex;align-items:center;gap:20px;color:#c6d2e7;
+  font-size:11px;font-weight:800;text-transform:uppercase
+}
+.navlinks a:hover{color:var(--blue2)}
+.nav-cta,.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  border-radius:10px;padding:12px 18px;font-weight:850;font-size:12px
+}
+.nav-cta{background:linear-gradient(135deg,#4169ff,#2850e8)}
+.menu{display:none;background:none;border:1px solid var(--line);box-shadow:none}
+
+
+/* ==================================================
+   06 – STARTBEREICH / HERO
+   Der große obere Bereich der Startseite.
+================================================== */
+
+.hero{
+  position:relative;overflow:hidden;min-height:720px;
+  display:grid;place-items:center;text-align:center;
+  border-bottom:1px solid var(--line)
+}
+.hero:before{
+  content:"";position:absolute;width:680px;height:500px;
+  left:50%;top:45%;transform:translate(-50%,-50%);
+  background:radial-gradient(ellipse,#2f5bff38,transparent 68%);
+  pointer-events:none
+}
+.hero-inner{padding:75px 0 82px}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:9px;padding:7px 12px;
+  border:1px solid #7095ff52;border-radius:999px;background:#4169ff17;
+  color:#b9caff;font-size:11px;font-weight:850;letter-spacing:.16em
+}
+.dot{width:7px;height:7px;border-radius:50%;background:#7095ff}
+h1 {
+    font-size: clamp(46px, 12vw, 72px);
+    line-height: .98;
+    letter-spacing: -.075em;
+    margin: 30px 0 24px;
+    font-weight: 1000;
+    text-shadow: 0 8px 45px rgba(0,0,0,.35);
+}
+.gradient{
+  background:linear-gradient(100deg,#fff,#a9bdff,#5680ff);
+  -webkit-background-clip:text;background-clip:text;color:transparent
+}
+.hero p{max-width:650px;margin:auto;color:var(--muted);font-size:17px}
+.hero-note{margin-top:34px;color:#70819f;font-size:11px;letter-spacing:.19em}
+
+
+/* ==================================================
+   07 – ALLGEMEINE SEKTIONS-DESIGNS
+================================================== */
+
+section{padding:65px 0}
+.section-head{
+  display:flex;align-items:end;justify-content:space-between;
+  gap:24px;margin-bottom:25px
+}
+.kicker{color:var(--blue2);font-size:11px;font-weight:900;letter-spacing:.18em}
+h2{font-size:clamp(27px,4vw,39px);letter-spacing:-.045em;line-height:1.1;margin:8px 0 0}
+.section-head p,.sub{color:var(--muted)}
+.game-section{padding-top:52px}
+.game-group-title{margin:28px 0 15px;color:#dce6ff;font-size:16px;font-weight:900}
+
+
+/* ==================================================
+   08 – MINIGAME-KARTEN
+   Das Aussehen der einzelnen Spiel-Buttons.
+================================================== */
+
+.games{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.game-card{
+  position:relative;overflow:hidden;text-align:left;min-height:190px;
+  padding:23px;border:1px solid var(--line);border-radius:17px;
+  background:linear-gradient(145deg,#142849,#0d1525);
+  display:flex;flex-direction:column;justify-content:flex-end;
+  transition:transform .25s,border-color .25s;box-shadow:none
+}
+.game-card:before{
+  content:"";position:absolute;inset:0;z-index:0;
+  background:radial-gradient(circle at 78% 20%,#4169ff38,transparent 35%)
+}
+.game-card>*{position:relative;z-index:1}
+.game-card:hover{transform:translateY(-5px);border-color:#7095ff88}
+.game-card .emoji{position:absolute;right:22px;top:15px;font-size:55px;opacity:.32}
+.game-card strong{font-size:18px;margin:4px 0}
+.game-card small{color:var(--muted);font-size:13px;font-weight:500}
+.card-tag{color:#9eb7ff;font-size:10px;font-weight:900;letter-spacing:.15em}
+
+
+/* ==================================================
+   09 – COIN-KONTO UND ACCOUNT-PANEL
+================================================== */
+
+.balance{
+  display:inline-flex;align-items:center;gap:8px;background:#14223a;
+  border:1px solid #52628a;border-radius:12px;padding:9px 14px;
+  color:var(--gold);font-weight:900;font-size:14px
+}
+.account-panel{
+  margin-top:28px;padding:25px;border:1px solid var(--line);
+  border-radius:17px;background:linear-gradient(145deg,#14223a,#0d1525)
+}
+.account-panel p{color:var(--muted);font-size:14px}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.row button{flex:1;min-width:145px}
+
+
+/* ==================================================
+   10 – ALLGEMEINE SPIELANSICHTEN
+   Gemeinsames Layout für alle neun Minigames.
+================================================== */
+
+.view{
+  display:none;max-width:820px;margin:40px auto 20px;
+  padding:clamp(18px,4vw,30px);border:1px solid var(--line);
+  border-radius:20px;background:linear-gradient(145deg,#14223a,#0d1525);
+  box-shadow:0 25px 70px #0005;
+  scroll-margin-top:95px;
+}
+.view.active{display:block;animation:appear .25s ease}
+@keyframes appear{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.view-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:12px}
+.view h2{font-size:25px;margin:0}
+.play-area{
+  margin:20px 0;min-height:175px;padding:23px 15px;
+  border:1px solid #344766;background:radial-gradient(ellipse at top,#192b49,#080f1d 75%);
+  border-radius:16px;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;gap:17px;text-align:center
+}
+.big{font-size:clamp(36px,8vw,65px);font-weight:950}
+.result{min-height:28px;text-align:center;font-weight:750;margin:14px 0}
+.controls{display:grid;gap:13px}
+.field-label{display:block;color:#cddaf0;font-weight:750;font-size:13px;margin-bottom:8px}
+.bet-box{padding:14px;border-radius:13px;border:1px solid #344766;background:#0b1424}
+.bet-box input{font-size:18px;font-weight:750;background:#14223a}
+.bet-caption{font-size:12px;color:#8799b8;margin-top:7px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.note{margin-top:28px;color:#8392ad;font-size:12px;text-align:center}
+
+
+/* ==================================================
+   11 – FOOTER
+================================================== */
+
+footer{border-top:1px solid var(--line);padding:28px 0 35px;color:#8392ad;font-size:12px}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.footer-links{display:flex;gap:18px;flex-wrap:wrap}
+.small-logo{font-size:21px;color:#fff}
+hr{border:0;border-top:1px solid var(--line);margin:22px 0}
+[hidden]{display:none!important}
+
+
+/* ==================================================
+   12 – SPIEL-DESIGNS: 3D-WÜRFEL
+================================================== */
+
+.dice-stage{width:130px;height:130px;perspective:600px;display:grid;place-items:center}
+.dice-cube{position:relative;width:90px;height:90px;transform-style:preserve-3d;transform:rotateX(-20deg) rotateY(-25deg);transition:transform .6s}
+.dice-cube.rolling{animation:diceRoll .75s ease-in-out}
+@keyframes diceRoll{0%{transform:rotateX(0) rotateY(0)}35%{transform:rotateX(230deg) rotateY(180deg) rotateZ(100deg) scale(1.12)}70%{transform:rotateX(400deg) rotateY(300deg) rotateZ(210deg)}100%{transform:rotateX(540deg) rotateY(360deg) rotateZ(360deg)}}
+.dice-face{
+  position:absolute;inset:0;display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);
+  gap:4px;padding:12px;background:linear-gradient(145deg,#fff,#d6def7);
+  border:2px solid white;border-radius:13px;backface-visibility:hidden
+}
+.dice-face.front{transform:translateZ(45px)}
+.dice-face.back{transform:rotateY(180deg) translateZ(45px)}
+.dice-face.right{transform:rotateY(90deg) translateZ(45px)}
+.dice-face.left{transform:rotateY(-90deg) translateZ(45px)}
+.dice-face.top{transform:rotateX(90deg) translateZ(45px)}
+.dice-face.bottom{transform:rotateX(-90deg) translateZ(45px)}
+.pip{width:100%;height:100%;display:grid;place-items:center}
+.pip:after{content:"";width:13px;height:13px;border-radius:50%;background:#222944}
+.dice-shadow{width:100px;height:17px;border-radius:50%;background:#0007;filter:blur(7px)}
+
+
+/* ==================================================
+   13 – SPIEL-DESIGNS: HIGH LOW
+================================================== */
+
+.hl-die{width:112px;height:112px;border-radius:20px;background:linear-gradient(145deg,#fff,#c9d5f7);border:3px solid white;display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);padding:15px;gap:6px}
+.hl-pip{display:grid;place-items:center}
+.hl-pip:after{content:"";width:14px;height:14px;border-radius:50%;background:#222944}
+.hl-pip.off:after{visibility:hidden}
+
+
+/* ==================================================
+   14 – SPIEL-DESIGNS: SLOTS
+================================================== */
+
+.slot-machine{width:min(100%,410px);padding:18px;border-radius:20px;border:2px solid #7095ff;background:linear-gradient(145deg,#18386b,#111d3b)}
+.slot-top{font-size:13px;font-weight:950;letter-spacing:4px;color:#c9d8ff;margin-bottom:14px}
+.slot-window{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px;border-radius:13px;background:#080b17;border:3px solid #9ab2ff}
+.slot-reel{display:grid;place-items:center;height:90px;border-radius:9px;background:linear-gradient(#f7f7ff,#cfd5ed);color:#161a2b;font-size:clamp(32px,7vw,49px)}
+.slot-reel.spinning{animation:reelSpin .13s linear infinite}
+@keyframes reelSpin{50%{transform:translateY(4px);filter:blur(2px)}}
+.slot-lights{display:flex;justify-content:space-around;margin:13px 0 0;color:#c9d8ff}
+
+
+/* ==================================================
+   15 – SPIEL-DESIGNS: ROULETTE
+================================================== */
+
+.roulette-table{width:min(100%,440px);padding:17px;background:radial-gradient(ellipse,#087a50,#06442f 75%);border:7px solid #8e633b;border-radius:48%}
+.table-label{font-weight:950;letter-spacing:4px;color:#f6e7ba;font-size:12px;margin-bottom:12px}
+.roulette-wheel{width:185px;height:185px;border-radius:50%;margin:auto;position:relative;background:repeating-conic-gradient(#bd202e 0deg 10deg,#171b26 10deg 20deg);border:8px solid #d4b16e;display:grid;place-items:center}
+.roulette-wheel:before{content:"";position:absolute;inset:27px;border-radius:50%;border:4px solid #d8b66e;background:radial-gradient(circle,#a57c42,#664222)}
+.roulette-wheel.spinning{animation:rouletteSpin 2.8s cubic-bezier(.12,.68,.15,1) forwards}
+@keyframes rouletteSpin{to{transform:rotate(1440deg)}}
+.ball-orbit{position:absolute;z-index:5;inset:0;border-radius:50%;pointer-events:none}
+.ball-orbit.rolling{animation:ballRoll 2.8s cubic-bezier(.12,.68,.15,1) forwards}
+@keyframes ballRoll{to{transform:rotate(var(--ball-end-angle,1440deg))}}
+.roulette-ball{position:absolute;top:8px;left:50%;width:15px;height:15px;border-radius:50%;transform:translateX(-50%);background:white;box-shadow:0 0 8px white}
+.roulette-hub{position:relative;z-index:2;width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#f8e6ad,#8f622d);border:3px solid #ffe8a4}
+.roulette-outcome{position:absolute;z-index:6;left:50%;top:50%;transform:translate(-50%,-50%);display:grid;place-items:center;width:43px;height:43px;border-radius:50%;border:2px solid #e8cb83;color:white;font-size:11px;font-weight:900}
+.roulette-outcome.red-pocket{background:#d52336}
+.roulette-outcome.black-pocket{background:#151722}
+.roulette-outcome.hidden{display:none}
+.table-number{margin-top:13px;color:#fff0c5;font-size:12px}
+
+
+/* ==================================================
+   16 – SPIEL-DESIGNS: MÜNZWURF
+================================================== */
+
+.coin-visual{width:145px;height:145px;border-radius:50%;display:grid;place-items:center;border:7px solid #e9bc55;background:radial-gradient(circle at 30% 25%,#fff0a3,#d89b26 55%,#83521b);color:#3c2811;transform-style:preserve-3d}
+.coin-face-text{font-size:18px;font-weight:1000;text-align:center;border:2px solid #8e601e;border-radius:50%;width:92px;height:92px;display:grid;place-items:center}
+.coin-visual.flipping{animation:coinFlip .7s ease-in-out}
+@keyframes coinFlip{50%{transform:rotateY(900deg) scale(1.12)}100%{transform:rotateY(1800deg)}}
+
+
+/* ==================================================
+   17 – SPIEL-DESIGNS: MEMORY
+================================================== */
+
+.memory-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:9px}
+.memory-tile{min-width:45px;height:54px;padding:0 8px;border-radius:10px;display:grid;place-items:center;background:#23395f;border:1px solid #7095ff;font-weight:950;font-size:23px}
+.memory-tile.covered{color:transparent!important;background:linear-gradient(135deg,#4169ff,#287be9)}
+.memory-tile.covered:after{content:"✦";color:#fff9;font-size:20px}
+
+
+/* ==================================================
+   18 – SPIEL-DESIGNS: REAKTIONSTEST
+================================================== */
+
+#reactionPad{width:100%;min-height:155px;border-radius:15px;font-size:22px;font-weight:900;background:#a91e36;border:2px solid #fb7185}
+#reactionPad.ready{background:#087b42;border-color:#6affb0;box-shadow:0 0 35px #22c55e50}
+#reactionPad.waiting{background:#a91e36;border-color:#fb7185}
+
+
+/* ==================================================
+   19 – RESPONSIVE DESIGN / MOBILE
+================================================== */
+
+@media(max-width:900px){.games{grid-template-columns:repeat(2,minmax(0,1fr))}.navlinks{gap:13px;font-size:10px}}
+@media(max-width:760px){
+  .wrap{width:calc(100% - 30px)}
+  .nav{height:66px}
+  .navlinks{display:none;position:absolute;top:66px;left:0;right:0;padding:20px 22px;background:#0b1322;border-bottom:1px solid var(--line);flex-direction:column;align-items:flex-start}
+  .navlinks.open{display:flex}
+  .nav-cta{display:none}.menu{display:block}
+  .hero{min-height:390px}.hero-inner{padding:65px 0}
+  .section-head{display:block}.section-head p{margin-top:13px}
+  section{padding:52px 0}.games{grid-template-columns:1fr}
+  .game-card{min-height:165px}
+  .footer-inner{flex-direction:column;align-items:flex-start}
+}
+@media(max-width:520px){.view h2{font-size:21px}.two{grid-template-columns:1fr}.balance{font-size:12px}}
+
+</style>
+</head>
+<body>
+
+<!-- ==================================================
+     20 – OBERE NAVIGATION / MENÜ
+================================================== -->
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="index.html">DUP7O<span>.</span></a>
+    <nav class="navlinks" id="navlinks">
+      <a href="minigames.html">Minigames</a>
+      <a href="badgecreator.html">Badgecreator</a>
+      <a href="templates.html">Templates</a>
+      <a href="designbearbeitung.html">Design Bearbeitung</a>
+      <a href="kochbuch.html">Kochbuch</a>
+    </nav>
+    <a class="nav-cta" href="https://discord.gg/gSt6NJ5fnX" target="_blank" rel="noopener">DISCORD BEITRETEN ↗</a>
+    <button class="menu" id="menu" aria-label="Menü öffnen" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+  <!-- ==================================================
+       22 – MINIGAME-ÜBERSICHT
+  ================================================== -->
+
+  <section class="game-section" id="games">
+  <div class="wrap">
+
+    <div class="section-head">
+      <div><div class="kicker">Choose your challenge</div><h2>MINIGAME COLLECTION</h2></div>
+      <div class="balance">🪙 <span id="balance">10.000</span> COINS</div>
+    </div>
+
+    <p class="sub">Wähle ein Spiel und starte direkt. Alle Coins sind virtuell und haben keinen Echtgeldwert.</p>
+
+
+    <!-- CASINO-KLASSIKER -->
+    <div class="game-group-title">🎰 CASINO-KLASSIKER</div>
+
+    <div class="games">
+      <button class="game-card" onclick="openGame('dice')"><span class="emoji">🎲</span><span class="card-tag">LUCK · DICE</span><strong>3D-Würfel</strong><small>Wirf den Würfel und hoffe auf eine hohe Zahl.</small></button>
+      <button class="game-card" onclick="openGame('slots')"><span class="emoji">🎰</span><span class="card-tag">JACKPOT · SPIN</span><strong>Neon Slots</strong><small>Drei Walzen und Gewinne.</small></button>
+      <button class="game-card" onclick="openGame('wheel')"><span class="emoji">🎡</span><span class="card-tag">RED · BLACK</span><strong>Rot oder Schwarz</strong><small>Dein Tipp auf dem Roulette-Tisch.</small></button>
+      <button class="game-card" onclick="openGame('coin')"><span class="emoji">🪙</span><span class="card-tag">HEADS · TAILS</span><strong>Münzwurf</strong><small>Kopf oder Zahl? Entscheide dich.</small></button>
+      <button class="game-card" onclick="openGame('highlow')"><span class="emoji">📈</span><span class="card-tag">HIGHER · LOWER</span><strong>Höher oder Tiefer</strong><small>Rate den nächsten Würfelwurf.</small></button>
+    </div>
+
+
+    <!-- SKILL- UND DENKSPIELE -->
+    <div class="game-group-title">🧠 SKILL- UND DENKSPIELE</div>
+
+    <div class="games">
+      <button class="game-card" onclick="openGame('memory')"><span class="emoji">🧠</span><span class="card-tag">BRAIN · MEMORY</span><strong>Zahlen-Memory</strong><small>Merke dir die Zahlen.</small></button>
+      <button class="game-card" onclick="openGame('rps')"><span class="emoji">✂️</span><span class="card-tag">CLASSIC · DUEL</span><strong>Schere, Stein, Papier</strong><small>Schlage den Computer.</small></button>
+      <button class="game-card" onclick="openGame('guess')"><span class="emoji">🔢</span><span class="card-tag">NUMBER · LOGIC</span><strong>Zahlenraten</strong><small>Finde die geheime Zahl.</small></button>
+      <button class="game-card" onclick="openGame('reaction')"><span class="emoji">⚡</span><span class="card-tag">SPEED · REFLEX</span><strong>Reaktionstest</strong><small>Teste deine Reflexe.</small></button>
+    </div>
+
+
+    <!-- ==================================================
+         23 – COIN-KONTO UND ADMIN-BEREICH
+    ================================================== -->
+
+    <div class="account-panel">
+
+      <div class="section-head">
+        <div><div class="kicker">Your virtual wallet</div><h2>COIN-KONTO</h2></div>
+        <div class="balance">🪙 <span id="balancePanel">10.000</span> COINS</div>
+      </div>
+
+      <p>Hol dir kostenlose Coins und spiele alle Minigames. Coins haben keinen Echtgeldwert.</p>
+
+      <div class="row">
+        <button class="green" onclick="claimCoins()">🎁 Gratis 250 Coins</button>
+        <button class="secondary" onclick="showAdmin()">🔒 Admin-Bereich</button>
+      </div>
+
+      <!-- ADMIN-ANMELDUNG -->
+      <div id="admin" hidden>
+        <hr><h3>🔐 Administrator-Anmeldung</h3>
+        <p class="sub">Admin-Passwort eingeben.</p>
+
+        <div class="controls">
+          <label class="field-label" for="adminPassword">Admin-Passwort<input id="adminPassword" type="password" placeholder="Passwort eingeben"></label>
+          <button onclick="loginAdmin()">Anmelden</button>
+        </div>
+
+        <p id="adminMessage" class="result"></p>
+
+        <!-- ADMIN-WERKZEUGE -->
+        <div id="adminTools" hidden>
+          <hr><label class="field-label" for="adminAmount">Coins hinzufügen</label>
+          <input id="adminAmount" type="number" min="1" max="1000000" value="1000">
+          <button style="margin-top:12px" onclick="addAdminCoins()">Coins hinzufügen</button>
+          <button class="secondary" style="margin-top:12px" onclick="logoutAdmin()">Abmelden</button>
+        </div>
+      </div>
+
+      <p id="coinMessage" class="result"></p>
+    </div>
+
+
+    <!-- ==================================================
+         24 – SPIELANSICHTEN
+         Hier befinden sich die einzelnen Minigames.
+    ================================================== -->
+
+
+    <!-- SPIEL 1 – 3D-WÜRFEL -->
+    <section id="dice" class="view">
+      <div class="view-head"><h2>🎲 3D-Würfel</h2><button class="secondary" onclick="goHome()">← Zurück</button></div>
+      <p class="sub">Bei einer 4, 5 oder 6 erhältst du den doppelten Einsatz zurück.</p>
+
+      <div class="play-area">
+        <div class="dice-stage"><div id="diceCube" class="dice-cube">
+          <div class="dice-face front" data-face="1"></div><div class="dice-face back" data-face="6"></div>
+          <div class="dice-face right" data-face="3"></div><div class="dice-face left" data-face="4"></div>
+          <div class="dice-face top" data-face="2"></div><div class="dice-face bottom" data-face="5"></div>
+        </div></div>
+        <div class="dice-shadow"></div><div id="diceResult" class="muted">Bereit für deinen Wurf?</div>
+      </div>
+
+      <div class="controls"><div class="bet-box"><label class="field-label" for="diceBet">Dein Einsatz · Coins</label><input id="diceBet" type="number" min="1" value="50"></div><button onclick="playDice()">🎲 Würfeln</button></div>
+    </section>
+
+
+    <!-- SPIEL 2 – NEON SLOTS -->
+    <section id="slots" class="view">
+      <div class="view-head"><h2>🎰 Neon Slots</h2><button class="secondary" onclick="goHome()">← Zurück</button></div>
+      <p class="sub">Drei gleiche Symbole zahlen das Fünffache aus. Zwei gleiche Symbole zahlen das 1,5-Fache aus.</p>
+
+      <div class="play-area">
+        <div class="slot-machine"><div class="slot-top">✦ DUP7O JACKPOT ✦</div>
+          <div class="slot-window"><div id="reel0" class="slot-reel">🍒</div><div id="reel1" class="slot-reel">💎</div><div id="reel2" class="slot-reel">⭐</div></div>
+          <div class="slot-lights">●　●　●　●　●</div>
+        </div><div id="slotResult" class="muted">Bereit für den Spin?</div>
+      </div>
+
+      <div class="controls"><div class="bet-box"><label class="field-label" for="slotBet">Dein Einsatz · Coins</label><input id="slotBet" type="number" min="1" value="50"></div><button id="spinButton" onclick="playSlots()">🎰 Spin drehen</button></div>
+    </section>
+
+
+    <!-- SPIEL 3 – ROULETTE -->
+    <section id="wheel" class="view">
+      <div class="view-head"><h2>🎡 Rot oder Schwarz</h2><button class="secondary" onclick="goHome()">← Zurück</button></div>
+      <p class="sub">Die Kugel rollt um das drehende Rad.</p>
+
+      <div class="play-area">
+        <div class="roulette-table"><div class="table-label">★ DUP7O ROULETTE ★</div>
+          <div id="rouletteWheel" class="roulette-wheel">
+            <div class="ball-orbit" id="ballOrbit"><div class="roulette-ball"></div></div>
+            <div class="roulette-hub"></div><div id="rouletteOutcome" class="roulette-outcome hidden">ROT</div>
+          </div><div class="table-number">ROT · SCHWARZ · ROT · SCHWARZ</div>
+        </div><div id="wheelResult" class="muted">Setze deinen Tipp.</div>
+      </div>
+
+      <div class="controls"><div class="bet-box"><label class="field-label" for="wheelBet">Dein Einsatz · Coins</label><input id="wheelBet" type="number" min="1" value="50"></div><div class="two"><button class="red" onclick="playWheel('Rot')">🔴 Rot</button><button class="secondary" onclick="playWheel('Schwarz')">⚫ Schwarz</button></div></div>
+    </section>
+
+
+    <!-- SPIEL 4 – MÜNZWURF -->
+    <section id="coin" class="view">
+      <div class="view-head"><h2>🪙 Münzwurf</h2><button class="secondary" onclick="goHome()">← Zurück</button></div>
+      <p class="sub">Wähle Kopf oder Zahl. Ein richtiger Tipp zahlt den doppelten Einsatz aus.</p>
+
+      <div class="play-area"><div id="coinVisual" class="coin-visual"><div id="coinFace" class="coin-face-text">KOPF</div></div><div id="coinResult" class="muted">Die Münze ist bereit.</div></div>
+
+      <div class="controls"><div class="bet-box"><label class="field-label" for="coinBet">Dein Einsatz · Coins</label><input id="coinBet" type="number" min="1" value="50"></div><div class="two"><button onclick="playCoin('Kopf')">KOPF</button><button class="secondary" onclick="playCoin('Zahl')">ZAHL</button></div></div>
+    </section>
+
+
+    <!-- SPIEL 5 – HÖHER ODER TIEFER -->
+    <section id="highlow" class="view">
+      <div class="view-head"><h2>📈 Höher oder Tiefer</h2><button class="secondary" onclick="goHome()">← Zurück</button></div>
+      <p class="sub">Rate, ob der nächste Würfelwert höher oder tiefer ist. Bei Gleichstand gibt es den Einsatz zurück.</p>
+
+      <div class="play-area"><div id="hlDie" class="hl-die"></div><div id="hlResult" class="muted">Starte eine Runde.</div></div>
+
+      <div class="controls"><div class="bet-box"><label class="field-label" for="hlBet">Dein Einsatz · Coins</label><input id="hlBet" type="number" min="1" value="50"></div><button onclick="startHighLow()">Neue Runde starten</button><div class="two"><button class="green" onclick="guessHighLow('higher')">⬆ Höher</button><button class="red" onclick="guessHighLow('lower')">⬇ Tiefer</button></div></div>
+    </section>
+
+
+    <!-- SPIEL 6 – ZAHLEN-MEMORY -->
+    <section id="memory" class="view">
+      <div class="view-head"><h2>🧠 Zahlen-Memory</h2><button class="secondary" onclick="goHome()">← Zurück</button></div>
+      <p class="sub">Merke dir die Ziffern. Zwei richtige Runden schalten eine weitere Ziffer frei.</p>
+
+      <div class="play-area"><div id="memoryStatus">Starte eine Runde.</div><div id="memoryNumbers" class="memory-grid"></div></div>
+
+      <form id="memoryForm" class="controls">
+        <label class="field-label" for="memoryAnswer">Ziffern direkt hintereinander eingeben</label>
+        <input id="memoryAnswer" type="text" inputmode="numeric" placeholder="Ziffern eingeben" disabled>
+        <button id="memorySubmit" type="submit" disabled>Antwort prüfen</button>
+      </form>
+
+      <div id="memoryResult" class="result"></div><button onclick="startMemory()">🧠 Neue Runde</button>
+      <p class="muted">Schwierigkeit: <span id="memoryLevel">1</span> Ziffer(n) · Richtige Runden: <span id="memoryProgress">0/2</span></p>
+    </section>
+
+
+    <!-- SPIEL 7 – SCHERE, STEIN, PAPIER -->
+    <section id="rps" class="view">
+      <div class="view-head"><h2>✂️ Schere, Stein, Papier</h2><button class="secondary" onclick="goHome()">← Zurück</button></div>
+      <p class="sub">Ein Sieg zahlt den doppelten Einsatz aus. Bei Gleichstand bekommst du deinen Einsatz zurück.</p>
+
+      <div class="play-area"><div class="big" id="rpsFaces">✊ VS ✋</div><div id="rpsResult" class="muted">Wähle deine Hand.</div></div>
+
+      <div class="controls"><div class="bet-box"><label class="field-label" for="rpsBet">Dein Einsatz · Coins</label><input id="rpsBet" type="number" min="1" value="25"></div><div class="three"><button onclick="playRPS('Stein')">✊<br>Stein</button><button onclick="playRPS('Papier')">✋<br>Papier</button><button onclick="playRPS('Schere')">✌️<br>Schere</button></div></div>
+    </section>
+
+
+    <!-- SPIEL 8 – ZAHLENRATEN -->
+    <section id="guess" class="view">
+      <div class="view-head"><h2>🔢 Zahlenraten</h2><button class="secondary" onclick="goHome()">← Zurück</button></div>
+      <p class="sub">Finde die geheime Zahl von 1 bis 100. Du hast sieben Versuche. Ein Sieg bringt 200 Coins. Eine Runde kostet 25 Coins.</p>
+
+      <div class="play-area"><div class="big">❔</div><div id="guessStatus">Starte eine neue Runde.</div><div id="guessTries" class="muted"></div></div>
+
+      <div class="controls"><input id="guessInput" type="number" min="1" max="100" placeholder="Zahl von 1 bis 100"><button onclick="submitGuess()">Tipp abgeben</button><button class="secondary" onclick="startGuess()">Neue Runde · 25 Coins</button></div>
+      <div id="guessResult" class="result"></div>
+    </section>
+
+
+    <!-- SPIEL 9 – REAKTIONSTEST -->
+    <section id="reaction" class="view">
+      <div class="view-head"><h2>⚡ Reaktionstest</h2><button class="secondary" onclick="goHome()">← Zurück</button></div>
+      <p class="sub">Warte, bis das Feld grün wird. Klicke erst dann.</p>
+
+      <div class="play-area"><button id="reactionPad" class="waiting" onclick="reactionClick()">Start drücken</button><div id="reactionResult" class="muted">Deine Bestzeit: <span id="reactionBest">–</span></div></div>
+
+      <button onclick="startReaction()">Neue Runde starten</button>
+    </section>
+
+
+    <!-- HINWEIS UNTER DEN SPIELEN -->
+    <p class="note">Virtuelle Coins ohne Echtgeldwert. Kontostand und Bestzeit werden lokal in deinem Browser gespeichert.</p>
+
+  </div>
+  </section>
+
+</main>
+
+
+<!-- ==================================================
+     25 – FOOTER / UNTERER SEITENBEREICH
+================================================== -->
+
+<footer>
+<div class="wrap footer-inner">
+  <div><div class="small-logo">DUP7O<span>.</span></div><div>Gaming · Community · Experience</div></div>
+  <div class="footer-links">
+<a href="https://sites.google.com/view/dup7odownloads/dup7odownloads">Downloads</a>
+<a href="templates.html">Templates</a>
+<a href="https://discord.gg/gSt6NJ5fnX" target="_blank" rel="noopener">Discord ↗</a></div>
+  <div>© <span id="year"></span> DUP7O</div>
+</div>
+</footer>
+
+<script>
+"use strict";
+
+
+/* ==================================================
+   26 – GRUNDEINSTELLUNGEN UND HILFSFUNKTIONEN
+================================================== */
+
+const ADMIN_PASSWORD="Dup7o";
+const $=id=>document.getElementById(id);
+
+let balance=Number(localStorage.getItem("neonBalance_v2"));
+if(!Number.isSafeInteger(balance)||balance<0) balance=10000;
+
+function saveBalance(){
+  localStorage.setItem("neonBalance_v2",String(balance));
+  $("balance").textContent=balance.toLocaleString("de-DE");
+  $("balancePanel").textContent=balance.toLocaleString("de-DE");
+}
+saveBalance();
+$("year").textContent=new Date().getFullYear();
+
+function say(id,text){$(id).textContent=text}
+function randomInt(min,max){return Math.floor(Math.random()*(max-min+1))+min}
+
+
+/* ==================================================
+   27 – MOBILE-NAVIGATION
+   Öffnen und Schließen des mobilen Menüs.
+================================================== */
+
+const menu=$("menu"),nav=$("navlinks");
+menu.addEventListener("click",()=>{
+  const open=nav.classList.toggle("open");
+  menu.setAttribute("aria-expanded",String(open));
+  menu.textContent=open?"✕":"☰";
+});
+
+nav.querySelectorAll("a").forEach(link=>link.addEventListener("click",()=>{
+  nav.classList.remove("open");
+  menu.setAttribute("aria-expanded","false");
+  menu.textContent="☰";
+}));
+
+
+/* ==================================================
+   28 – SPIEL-NAVIGATION
+   Spiel öffnen und zur Übersicht zurückkehren.
+================================================== */
+
+function openGame(id){
+  const selectedGame=$(id);
+  if(!selectedGame)return;
+
+  document.querySelectorAll(".view").forEach(view=>{
+    view.classList.remove("active");
+  });
+
+  selectedGame.classList.add("active");
+
+  // Wartet, bis das Spiel sichtbar ist, und scrollt dann direkt dorthin.
+  requestAnimationFrame(()=>{
+    selectedGame.scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+  });
+}
+
+function goHome(){
+  stopReaction();
+
+  document.querySelectorAll(".view").forEach(view=>{
+    view.classList.remove("active");
+  });
+
+  $("games").scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+}
+
+
+/* ==================================================
+   29 – COIN-SYSTEM / EINSÄTZE / AUSZAHLUNGEN
+================================================== */
+
+function getBet(id){
+  const raw=$(id).value,bet=Number(raw);
+  if(raw.trim()===""||!Number.isSafeInteger(bet)||bet<1){
+    alert("Bitte einen gültigen Einsatz von mindestens 1 Coin eingeben.");
+    return null;
+  }
+  if(bet>balance){
+    alert("Du hast nicht genug Coins für diesen Einsatz.");
+    return null;
+  }
+  return bet;
+}
+
+function spend(bet){balance-=bet;saveBalance()}
+function payout(amount){balance+=amount;saveBalance()}
+
+
+/* ==================================================
+   30 – SPIEL 1: 3D-WÜRFEL
+================================================== */
+
+function fillDiceFaces(){
+  const layouts={
+    1:[4],2:[0,8],3:[0,4,8],
+    4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]
+  };
+  document.querySelectorAll(".dice-face").forEach(face=>{
+    const active=layouts[Number(face.dataset.face)];
+    face.replaceChildren();
+    for(let i=0;i<9;i++){
+      const p=document.createElement("div");
+      p.className="pip";
+      if(!active.includes(i))p.style.visibility="hidden";
+      face.appendChild(p);
+    }
+  });
+}
+
+fillDiceFaces();
+let diceBusy=false;
+
+function playDice(){
+  if(diceBusy)return;
+  const bet=getBet("diceBet");
+  if(bet===null)return;
+  spend(bet);
+  diceBusy=true;
+  const cube=$("diceCube");
+  cube.classList.remove("rolling");
+  void cube.offsetWidth;
+  cube.classList.add("rolling");
+  say("diceResult","Der Würfel rollt …");
+  const n=randomInt(1,6);
+
+  setTimeout(()=>{
+    cube.classList.remove("rolling");
+    const rotations={
+      1:"rotateX(0deg) rotateY(0deg)",
+      2:"rotateX(-90deg) rotateY(0deg)",
+      3:"rotateX(0deg) rotateY(-90deg)",
+      4:"rotateX(0deg) rotateY(90deg)",
+      5:"rotateX(90deg) rotateY(0deg)",
+      6:"rotateX(0deg) rotateY(180deg)"
+    };
+    cube.style.transform=rotations[n];
+    if(n>=4){
+      payout(bet*2);
+      say("diceResult",`🎉 Eine ${n}! ${bet*2} Coins zurückgewonnen.`);
+    }else say("diceResult",`Eine ${n}. Diesmal kein Gewinn.`);
+    diceBusy=false;
+  },750);
+}
+
+
+/* ==================================================
+   31 – SPIEL 2: NEON SLOTS
+================================================== */
+
+const symbols=["🍒","💎","⭐","🍋","7️⃣","🔔"];
+let slotsBusy=false;
+
+function playSlots(){
+  if(slotsBusy)return;
+  const bet=getBet("slotBet");
+  if(bet===null)return;
+  spend(bet);
+  slotsBusy=true;
+  $("spinButton").disabled=true;
+  say("slotResult","Die Walzen drehen sich …");
+
+  const reels=[0,1,2].map(i=>$("reel"+i));
+  const final=Array.from({length:3},()=>symbols[randomInt(0,symbols.length-1)]);
+  reels.forEach(r=>r.classList.add("spinning"));
+
+  reels.forEach((reel,i)=>setTimeout(()=>{
+    reel.classList.remove("spinning");
+    reel.textContent=final[i];
+
+    if(i===2){
+      const counts={};
+      final.forEach(s=>counts[s]=(counts[s]||0)+1);
+      const max=Math.max(...Object.values(counts));
+
+      if(max===3){
+        payout(bet*5);
+        say("slotResult",`💎 JACKPOT! Du erhältst ${bet*5} Coins zurück.`);
+      }else if(max===2){
+        const reward=Math.floor(bet*1.5);
+        payout(reward);
+        say("slotResult",`✨ Zwei gleiche Symbole! ${reward} Coins zurück.`);
+      }else say("slotResult","Kein Treffer. Versuch es noch einmal!");
+
+      slotsBusy=false;
+      $("spinButton").disabled=false;
+    }
+  },500+i*450));
+}
+
+
+/* ==================================================
+   32 – SPIEL 3: ROULETTE
+================================================== */
+
+let wheelBusy=false;
+
+function playWheel(choice){
+  if(wheelBusy)return;
+  const bet=getBet("wheelBet");
+  if(bet===null)return;
+  spend(bet);
+  wheelBusy=true;
+
+  const wheel=$("rouletteWheel");
+  const orbit=$("ballOrbit");
+  const outcome=$("rouletteOutcome");
+  const result=Math.random()<.5?"Rot":"Schwarz";
+
+  wheel.classList.remove("spinning");
+  orbit.classList.remove("rolling");
+  outcome.classList.add("hidden");
+  wheel.style.transform="";
+  orbit.style.transform="rotate(0deg)";
+  orbit.style.setProperty("--ball-end-angle",result==="Rot"?"1440deg":"1450deg");
+
+  void wheel.offsetWidth;
+  wheel.classList.add("spinning");
+  orbit.classList.add("rolling");
+  say("wheelResult","🎡 Das Rad dreht sich …");
+
+  setTimeout(()=>{
+    wheel.classList.remove("spinning");
+    orbit.classList.remove("rolling");
+    orbit.style.transform=result==="Rot"?"rotate(0deg)":"rotate(10deg)";
+    outcome.classList.remove("hidden");
+    outcome.textContent=result.toUpperCase();
+    outcome.classList.toggle("red-pocket",result==="Rot");
+    outcome.classList.toggle("black-pocket",result==="Schwarz");
+
+    if(choice===result){
+      payout(bet*2);
+      say("wheelResult",`🎉 Die Kugel landet auf ${result}! ${bet*2} Coins zurück.`);
+    }else say("wheelResult",`Die Kugel landet auf ${result}. Diesmal kein Gewinn.`);
+    wheelBusy=false;
+  },2800);
+}
+
+
+/* ==================================================
+   33 – SPIEL 4: MÜNZWURF
+================================================== */
+
+let coinBusy=false;
+
+function playCoin(choice){
+  if(coinBusy)return;
+  const bet=getBet("coinBet");
+  if(bet===null)return;
+  spend(bet);
+  coinBusy=true;
+
+  const coin=$("coinVisual");
+  coin.classList.remove("flipping");
+  void coin.offsetWidth;
+  coin.classList.add("flipping");
+  say("coinResult","Die Münze fliegt …");
+
+  const result=Math.random()<.5?"Kopf":"Zahl";
+
+  setTimeout(()=>{
+    coin.classList.remove("flipping");
+    $("coinFace").textContent=result.toUpperCase();
+    coin.style.transform=result==="Kopf"?"rotateY(0deg)":"rotateY(180deg)";
+
+    if(choice===result){
+      payout(bet*2);
+      say("coinResult",`🎉 ${result}! ${bet*2} Coins zurück.`);
+    }else say("coinResult",`Es ist ${result}. Leider verloren.`);
+    coinBusy=false;
+  },700);
+}
+
+
+/* ==================================================
+   34 – SPIEL 5: HÖHER ODER TIEFER
+================================================== */
+
+function drawHighLowDie(n){
+  const layouts={
+    1:[4],2:[0,8],3:[0,4,8],
+    4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]
+  };
+  const die=$("hlDie");
+  die.replaceChildren();
+  for(let i=0;i<9;i++){
+    const p=document.createElement("div");
+    p.className="hl-pip"+(layouts[n].includes(i)?"":" off");
+    die.appendChild(p);
+  }
+}
+
+let hlCurrent=null,hlActive=false,hlStake=0;
+
+function startHighLow(){
+  if(hlActive){
+    say("hlResult","Rate zuerst höher oder tiefer.");
+    return;
+  }
+  const bet=getBet("hlBet");
+  if(bet===null)return;
+  spend(bet);
+  hlStake=bet;
+  hlCurrent=randomInt(1,6);
+  hlActive=true;
+  drawHighLowDie(hlCurrent);
+  say("hlResult",`Startwert: ${hlCurrent}. Höher oder tiefer?`);
+}
+
+function guessHighLow(choice){
+  if(!hlActive){
+    say("hlResult","Starte zuerst eine Runde.");
+    return;
+  }
+  const previous=hlCurrent,next=randomInt(1,6);
+  hlActive=false;
+  drawHighLowDie(next);
+
+  if(next===previous){
+    payout(hlStake);
+    say("hlResult",`Gleichstand: ${previous} → ${next}. Einsatz zurück.`);
+  }else if(
+    (choice==="higher"&&next>previous)||
+    (choice==="lower"&&next<previous)
+  ){
+    payout(hlStake*2);
+    say("hlResult",`🎉 Richtig: ${previous} → ${next}. ${hlStake*2} Coins zurück.`);
+  }else say("hlResult",`Leider falsch: ${previous} → ${next}.`);
+}
+
+
+/* ==================================================
+   35 – SPIEL 6: ZAHLEN-MEMORY
+================================================== */
+
+let memorySolution=[],memoryLevel=1,memoryCorrectRounds=0;
+let memoryActive=false,memoryTimer=null;
+
+function updateMemoryProgress(){
+  say("memoryLevel",memoryLevel);
+  say("memoryProgress",`${memoryCorrectRounds}/2`);
+}
+
+function startMemory(){
+  clearTimeout(memoryTimer);
+  memoryActive=false;
+  memorySolution=Array.from({length:memoryLevel},()=>randomInt(0,9));
+  $("memoryResult").textContent="";
+  $("memoryAnswer").value="";
+  $("memoryAnswer").disabled=true;
+  $("memorySubmit").disabled=true;
+  $("memoryNumbers").replaceChildren();
+
+  memorySolution.forEach(n=>{
+    const tile=document.createElement("div");
+    tile.className="memory-tile";
+    tile.textContent=n;
+    $("memoryNumbers").appendChild(tile);
+  });
+
+  updateMemoryProgress();
+  say("memoryStatus",`Merke dir ${memoryLevel} Ziffer(n)!`);
+
+  const displayTime=Math.max(2500,5000-(memoryLevel-1)*250);
+
+  memoryTimer=setTimeout(()=>{
+    $("memoryNumbers").replaceChildren();
+    memorySolution.forEach(()=>{
+      const tile=document.createElement("div");
+      tile.className="memory-tile covered";
+      tile.textContent="?";
+      $("memoryNumbers").appendChild(tile);
+    });
+    say("memoryStatus","Jetzt bist du dran! Gib die Ziffern ein.");
+    $("memoryAnswer").disabled=false;
+    $("memorySubmit").disabled=false;
+    memoryActive=true;
+    $("memoryAnswer").focus();
+  },displayTime);
+}
+
+$("memoryForm").addEventListener("submit",event=>{
+  event.preventDefault();
+  if(!memoryActive)return;
+
+  const entered=$("memoryAnswer").value.replace(/\s/g,"");
+  const correct=memorySolution.join("");
+  memoryActive=false;
+  $("memoryAnswer").disabled=true;
+  $("memorySubmit").disabled=true;
+  $("memoryNumbers").replaceChildren();
+
+  memorySolution.forEach(n=>{
+    const tile=document.createElement("div");
+    tile.className="memory-tile";
+    tile.textContent=n;
+    $("memoryNumbers").appendChild(tile);
+  });
+
+  if(entered===correct){
+    memoryCorrectRounds++;
+    if(memoryCorrectRounds>=2){
+      if(memoryLevel<12){
+        memoryLevel++;
+        memoryCorrectRounds=0;
+        say("memoryResult",`🎉 Richtig! Nächstes Level: ${memoryLevel} Ziffern.`);
+      }else{
+        memoryCorrectRounds=2;
+        say("memoryResult","🏆 Du hast die höchste Stufe erreicht!");
+      }
+    }else say("memoryResult","✅ Richtig! Noch eine richtige Runde bis zum nächsten Level.");
+    $("memoryResult").style.color="#4ade80";
+  }else{
+    say("memoryResult",`❌ Falsch. Richtig war ${correct}. Neustart bei Level 1.`);
+    $("memoryResult").style.color="#fb7185";
+    memoryLevel=1;
+    memoryCorrectRounds=0;
+  }
+
+  updateMemoryProgress();
+  say("memoryStatus","Runde beendet. Starte die nächste Runde.");
+});
+
+$("memoryAnswer").addEventListener("input",()=>{
+  $("memoryAnswer").value=$("memoryAnswer").value.replace(/[^0-9]/g,"");
+});
+
+
+/* ==================================================
+   36 – SPIEL 7: SCHERE, STEIN, PAPIER
+================================================== */
+
+function playRPS(choice){
+  const bet=getBet("rpsBet");
+  if(bet===null)return;
+  spend(bet);
+
+  const options=["Stein","Papier","Schere"];
+  const computer=options[randomInt(0,2)];
+  const emoji={Stein:"✊",Papier:"✋",Schere:"✌️"};
+  $("rpsFaces").textContent=`${emoji[choice]} VS ${emoji[computer]}`;
+
+  if(choice===computer){
+    payout(bet);
+    say("rpsResult",`Unentschieden! Einsatz zurück.`);
+  }else if(
+    (choice==="Stein"&&computer==="Schere")||
+    (choice==="Papier"&&computer==="Stein")||
+    (choice==="Schere"&&computer==="Papier")
+  ){
+    payout(bet*2);
+    say("rpsResult",`🎉 Du gewinnst! ${choice} schlägt ${computer}.`);
+  }else say("rpsResult",`Der Computer gewinnt mit ${computer}.`);
+}
+
+
+/* ==================================================
+   37 – SPIEL 8: ZAHLENRATEN
+================================================== */
+
+let secretNumber=null,guessesLeft=0,guessActive=false;
+
+function startGuess(){
+  if(guessActive&&!confirm("Aktuelle Runde abbrechen und neu starten?"))return;
+  guessActive=false;
+  if(balance<25){
+    alert("Du brauchst 25 Coins für eine neue Runde.");
+    return;
+  }
+  spend(25);
+  secretNumber=randomInt(1,100);
+  guessesLeft=7;
+  guessActive=true;
+  $("guessInput").value="";
+  $("guessInput").disabled=false;
+  say("guessStatus","Ich habe eine Zahl zwischen 1 und 100 gewählt.");
+  say("guessTries",`Noch ${guessesLeft} Versuche.`);
+  say("guessResult","");
+}
+
+function submitGuess(){
+  if(!guessActive){
+    say("guessResult","Starte zuerst eine neue Runde.");
+    return;
+  }
+  const raw=$("guessInput").value,n=Number(raw);
+  if(raw.trim()===""||!Number.isInteger(n)||n<1||n>100){
+    say("guessResult","Bitte eine Zahl von 1 bis 100 eingeben.");
+    return;
+  }
+
+  guessesLeft--;
+
+  if(n===secretNumber){
+    guessActive=false;
+    payout(200);
+    $("guessInput").disabled=true;
+    say("guessStatus",`🎉 Richtig! Die Zahl war ${secretNumber}.`);
+    say("guessTries",`${7-guessesLeft} Versuch(e) gebraucht.`);
+    say("guessResult","+200 Coins!");
+  }else if(guessesLeft<=0){
+    guessActive=false;
+    $("guessInput").disabled=true;
+    say("guessStatus",`Runde beendet. Die Zahl war ${secretNumber}.`);
+    say("guessTries","Keine Versuche mehr.");
+    say("guessResult","Starte eine neue Runde.");
+  }else{
+    say("guessStatus",n<secretNumber?"📈 Die Zahl ist HÖHER.":"📉 Die Zahl ist TIEFER.");
+    say("guessTries",`Noch ${guessesLeft} Versuche.`);
+    say("guessResult","Versuch es noch einmal!");
+  }
+}
+
+$("guessInput").addEventListener("keydown",e=>{
+  if(e.key==="Enter"){
+    e.preventDefault();
+    submitGuess();
+  }
+});
+
+
+/* ==================================================
+   38 – SPIEL 9: REAKTIONSTEST
+================================================== */
+
+let reactionTimer=null,reactionStart=0,reactionState="idle";
+let reactionBest=Number(localStorage.getItem("neonReactionBest"))||0;
+
+function renderReactionBest(){
+  say("reactionBest",reactionBest?reactionBest+" ms":"–");
+}
+renderReactionBest();
+
+function stopReaction(){
+  clearTimeout(reactionTimer);
+  reactionState="idle";
+  if($("reactionPad")){
+    $("reactionPad").classList.remove("ready","waiting");
+    $("reactionPad").textContent="Start drücken";
+  }
+}
+
+function startReaction(){
+  clearTimeout(reactionTimer);
+  reactionState="waiting";
+  $("reactionPad").classList.remove("ready");
+  $("reactionPad").classList.add("waiting");
+  $("reactionPad").textContent="Warte auf GRÜN …";
+  say("reactionResult","Nicht zu früh klicken!");
+
+  reactionTimer=setTimeout(()=>{
+    if(reactionState!=="waiting")return;
+    reactionState="ready";
+    reactionStart=performance.now();
+    $("reactionPad").classList.remove("waiting");
+    $("reactionPad").classList.add("ready");
+    $("reactionPad").textContent="JETZT KLICKEN!";
+  },randomInt(1500,4500));
+}
+
+function reactionClick(){
+  if(reactionState==="idle"){
+    startReaction();
+    return;
+  }
+  if(reactionState==="waiting"){
+    clearTimeout(reactionTimer);
+    reactionState="idle";
+    $("reactionPad").classList.remove("ready","waiting");
+    $("reactionPad").textContent="Zu früh! Noch einmal";
+    say("reactionResult","Du hast vor dem grünen Signal geklickt.");
+    return;
+  }
+
+  const ms=Math.round(performance.now()-reactionStart);
+  reactionState="idle";
+  $("reactionPad").classList.remove("ready","waiting");
+  $("reactionPad").textContent="Fertig! Neue Runde?";
+
+  say("reactionResult",`${ms} ms – ${
+    ms<200?"Unglaublich schnell!":
+    ms<300?"Sehr gut!":
+    ms<450?"Solide Reaktion!":"Das geht noch schneller!"
+  }`);
+
+  if(!reactionBest||ms<reactionBest){
+    reactionBest=ms;
+    localStorage.setItem("neonReactionBest",String(ms));
+    renderReactionBest();
+  }
+}
+
+
+/* ==================================================
+   39 – GRATIS-COINS
+   Tägliche kostenlose Coins abholen.
+================================================== */
+
+function claimCoins(){
+  const last=Number(localStorage.getItem("neonFreeCoinsAt")||0);
+  const now=Date.now(),day=24*60*60*1000;
+
+  if(now-last<day){
+    const hours=Math.ceil((day-(now-last))/3600000);
+    say("coinMessage",`🎁 Bereits abgeholt. In etwa ${hours} Stunde(n) wieder verfügbar.`);
+    return;
+  }
+
+  payout(250);
+  localStorage.setItem("neonFreeCoinsAt",String(now));
+  say("coinMessage","🎉 250 kostenlose Coins wurden gutgeschrieben!");
+}
+
+
+/* ==================================================
+   40 – ADMIN-BEREICH
+   Anmeldung, Abmeldung und Coins hinzufügen.
+================================================== */
+
+function showAdmin(){
+  $("admin").hidden=!$("admin").hidden;
+  if(!$("admin").hidden){
+    $("adminTools").hidden=true;
+    $("adminPassword").value="";
+    $("adminMessage").textContent="";
+    $("adminPassword").focus();
+  }
+}
+
+function loginAdmin(){
+  if($("adminPassword").value===ADMIN_PASSWORD){
+    $("adminTools").hidden=false;
+    say("adminMessage","Anmeldung erfolgreich.");
+    $("adminMessage").style.color="#4ade80";
+    $("adminPassword").value="";
+  }else{
+    $("adminTools").hidden=true;
+    say("adminMessage","Falsches Passwort.");
+    $("adminMessage").style.color="#fb7185";
+    $("adminPassword").value="";
+    $("adminPassword").focus();
+  }
+}
+
+$("adminPassword").addEventListener("keydown",e=>{
+  if(e.key==="Enter")loginAdmin();
+});
+
+function logoutAdmin(){
+  $("adminTools").hidden=true;
+  $("adminPassword").value="";
+  say("adminMessage","Du wurdest abgemeldet.");
+}
+
+function addAdminCoins(){
+  if($("adminTools").hidden)return;
+  const raw=$("adminAmount").value,n=Number(raw);
+
+  if(raw.trim()===""||!Number.isSafeInteger(n)||n<1||n>1000000){
+    say("adminMessage","Bitte einen Betrag zwischen 1 und 1.000.000 eingeben.");
+    return;
+  }
+
+  payout(n);
+  say("adminMessage",`${n.toLocaleString("de-DE")} Coins hinzugefügt.`);
+  $("adminMessage").style.color="#4ade80";
+}
+
+</script>
+</body>
+</html>
